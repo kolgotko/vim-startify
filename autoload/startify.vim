@@ -333,6 +333,11 @@ function! startify#session_write(session_path)
   endif
 
   call s:create_last_session_link(a:session_path)
+
+  " restore after save session
+  for cmd in get(g:, 'startify_session_after_save', [])
+    execute cmd
+  endfor
 endfunction
 
 " Function: #session_delete {{{1
