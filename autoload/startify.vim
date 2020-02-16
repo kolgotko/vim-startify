@@ -199,9 +199,19 @@ function! startify#session_load(source_last_session, ...) abort
     if get(g:, 'startify_session_persistence') && filewritable(v:this_session)
       call startify#session_write(fnameescape(v:this_session))
     endif
+
+
+    for cmd in get(g:, 'startify_session_before_load', [])
+      execute cmd
+    endfor
+
     call startify#session_delete_buffers()
     execute 'source '. fnameescape(session_path)
     call s:create_last_session_link(session_path)
+
+    for cmd in get(g:, 'startify_session_after_load', [])
+      execute cmd
+    endfor
   else
     echo 'No such file: '. session_path
   endif
